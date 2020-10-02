@@ -22,3 +22,4 @@ Develop a JavaScript web application that fetches a relevantly-sized list of pos
     - Create a GitHub repo and clone it.
     - Initialize project with create-react-app.
     - Make initial commit.
+2. 
