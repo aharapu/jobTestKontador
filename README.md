@@ -22,4 +22,7 @@ Develop a JavaScript web application that fetches a relevantly-sized list of pos
     - Create a GitHub repo and clone it.
     - Initialize project with create-react-app.
     - Make initial commit.
-2. 
+2. Test query FakerQL.
+    - Install Apollo and hook it up to React.
+    - Send a query and console log to make sure the client is working properly.
+    
