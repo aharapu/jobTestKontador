@@ -25,4 +25,7 @@ Develop a JavaScript web application that fetches a relevantly-sized list of pos
 2. Test query FakerQL.
     - Install Apollo and hook it up to React.
     - Send a query and console log to make sure the client is working properly.
-    
+3. Install VisX and setup basic histogram.
+    - Write the required GraphQL query.
+    - Use the gql response to generate histogram data.
+    - Generate a simple histogram.
