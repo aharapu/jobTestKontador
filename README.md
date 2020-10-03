@@ -29,3 +29,8 @@ Develop a JavaScript web application that fetches a relevantly-sized list of pos
     - Write the required GraphQL query.
     - Use the gql response to generate histogram data.
     - Generate a simple histogram.
+
+#### note
+At this point the task requirements are met, but the code is in bad shape and needs refactoring.
+
+4. Refactor Apollo to make use of the provier and useQuery hook.

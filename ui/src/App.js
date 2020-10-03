@@ -1,60 +1,23 @@
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 
-import ApolloClient from 'apollo-boost'
-import { ApolloProvider } from 'react-apollo'
-import gql from 'graphql-tag'
+import { ApolloClient, InMemoryCache } from '@apollo/client'
+import { ApolloProvider } from '@apollo/client'
 
-import { letterFrequency } from '@visx/mock-data'
-
-import Histogram from './Histogram'
+import Histogram from './components/Histogram'
 import './App.css'
-
-console.log('letterFrequency', letterFrequency)
 
 const client = new ApolloClient({
     uri: 'https://fakerql.stephix.uk/graphql',
-})
-
-const testQuery = gql`
-    {
-        allPosts(count: 250) {
-            createdAt
-        }
-    }
-`
+	cache: new InMemoryCache()
+  })
 
 function App() {
-	const [histogramData, setHistogramData] = useState([])
-
-    useEffect(() => {
-        client
-            .query({
-                query: testQuery,
-            })
-            .then((res) => {
-                const postsArr = res.data.allPosts
-                    .map((post) => new Date(parseInt(post.createdAt)))
-					.filter((date) => date.getUTCFullYear() === 2019)
-					.map( date => date.getMonth())
-					.reduce((acc, val) => {
-						acc[val] = acc[val] + 1
-						return acc
-					}, new Array(12).fill(0))
-					.map( (postsNr, i) => ({ month: i, postsNr}))
-				console.log('postsArr', postsArr)
-
-				setHistogramData(postsArr)
-            })
-            .catch((err) => console.error(err))
-    }, [])
-
     return (
         <ApolloProvider client={client}>
             <div className="App">
                 <header className="App-header">Example Project</header>
                 <div>
-                    here's some data
-                    <Histogram data={histogramData} />
+                    <Histogram />
                 </div>
             </div>
         </ApolloProvider>

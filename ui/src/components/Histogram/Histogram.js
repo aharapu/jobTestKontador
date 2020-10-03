@@ -1,15 +1,38 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
+import { useQuery, gql } from '@apollo/client'
 
 import { Group } from '@visx/group'
 import { Bar } from '@visx/shape'
 import { scaleLinear, scaleBand } from '@visx/scale'
+
+const GET_POSTS = gql`
+    query GetPosts {
+        allPosts(count: 250) {
+            createdAt
+        }
+    }
+`
 
 const xMax = 500
 const yMax = 500
 
 const compose = (scale, accessor) => (data) => scale(accessor(data))
 
-const Histogram = ({ data }) => {
+const Histogram = () => {
+    const { loading, error, data } = useQuery(GET_POSTS)
+
+    if (loading) return <div>Loading...</div>
+    if (error) return <div>Error occured</div>
+
+    const histData = data.allPosts
+        .map((post) => new Date(parseInt(post.createdAt)))
+        .filter((date) => date.getUTCFullYear() === 2019)
+        .map((date) => date.getMonth())
+        .reduce((acc, val) => {
+            acc[val] = acc[val] + 1
+            return acc
+        }, new Array(12).fill(0))
+        .map((postsNr, i) => ({ month: i, postsNr }))
 
     const x = (d) => d.month
     const y = (d) => d.postsNr
@@ -17,21 +40,18 @@ const Histogram = ({ data }) => {
     const xScale = scaleBand({
         range: [0, xMax],
         round: true,
-        domain: data.map(x),
+        domain: histData.map(x),
         padding: 0.4,
     })
     const yScale = scaleLinear({
         range: [yMax, 0],
         round: true,
-        domain: [0, Math.max(...data.map(y))],
+        domain: [0, Math.max(...histData.map(y))],
     })
-
-    if (data.length === 0)
-        return <div>Loading...</div>
 
     return (
         <svg width={600} height={300}>
-            {data.map((d, i) => {
+            {histData.map((d, i) => {
                 const barHeight = yMax - compose(yScale, y)(d)
                 return (
                     <Group key={`bar-${i}`}>
